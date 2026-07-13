@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Juan Prado — Data & Basketball Analytics</title>
+<meta name="description" content="Juan Prado — MIS student at University of Houston building data analytics and basketball analytics projects." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0F1B2D;
+    --ink-soft: #1B2A42;
+    --paper: #ECE4CE;
+    --paper-line: #D8CDAE;
+    --marker: #F4A227;
+    --marker-soft: rgba(244, 162, 39, 0.28);
+    --chalk: #F5F2E8;
+    --muted: #8CA0BE;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--chalk);
+    font-family: 'Inter', ui-sans-serif, system-ui;
+    line-height: 1.6;
+  }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---- Nav ---- */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(15, 27, 45, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--ink-soft);
+  }
+  nav .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  nav .brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    color: var(--marker);
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 28px;
+    margin: 0;
+    padding: 0;
+  }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.15s ease;
+  }
+  nav a:hover, nav a:focus-visible { color: var(--chalk); }
+
+  /* ---- Hero ---- */
+  header.hero {
+    padding: 96px 0 64px;
+    border-bottom: 1px solid var(--ink-soft);
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--marker);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .eyebrow::before { content: "▸ "; }
+
+  h1.name {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 800;
+    font-size: clamp(56px, 11vw, 108px);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    margin: 0 0 20px;
+    text-transform: uppercase;
+    color: var(--chalk);
+  }
+
+  .position-tag {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--marker);
+    padding: 6px 14px;
+    border-radius: 3px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    margin-bottom: 28px;
+  }
+
+  .hero-sub {
+    max-width: 56ch;
+    font-size: 18px;
+    color: var(--muted);
+    margin-bottom: 44px;
+  }
+  .hero-sub strong { color: var(--chalk); font-weight: 600; }
+
+  /* ---- Stat line (signature element) ---- */
+  .statline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    border: 1px solid var(--ink-soft);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .stat {
+    padding: 18px 20px;
+    border-right: 1px solid var(--ink-soft);
+    position: relative;
+  }
+  .stat:last-child { border-right: none; }
+  .stat .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .stat .value {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--chalk);
+    position: relative;
+    display: inline-block;
+  }
+  .stat .value .highlight {
+    position: relative;
+    z-index: 1;
+  }
+  .stat .value .highlight::before {
+    content: "";
+    position: absolute;
+    left: -3px; right: -3px; bottom: 2px;
+    height: 40%;
+    background: var(--marker-soft);
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: swipe 0.6s ease forwards;
+    animation-delay: var(--d, 0.2s);
+  }
+  @keyframes swipe {
+    to { transform: scaleX(1); }
+  }
+
+  /* ---- Sections ---- */
+  section { padding: 80px 0; border-bottom: 1px solid var(--ink-soft); }
+  section:last-of-type { border-bottom: none; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--marker);
+    font-size: 14px;
+    font-weight: 700;
+  }
+  h2 {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 34px;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    margin: 0;
+    color: var(--chalk);
+  }
+
+  .prose { max-width: 62ch; color: var(--muted); font-size: 16px; }
+  .prose strong { color: var(--chalk); }
+
+  /* ---- Project card (Game Film) ---- */
+  .project-card {
+    background: var(--ink-soft);
+    border: 1px solid #263a56;
+    border-radius: 6px;
+    padding: 32px;
+  }
+  .project-card h3 {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 28px;
+    margin: 0 0 8px;
+    color: var(--chalk);
+    text-transform: uppercase;
+  }
+  .project-card .tagline {
+    color: var(--marker);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+  .project-card p { color: var(--muted); margin-bottom: 20px; }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--chalk);
+    border: 1px solid #2E4462;
+    padding: 4px 10px;
+    border-radius: 3px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 11px 20px;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+  }
+  .btn-primary { background: var(--marker); color: var(--ink); }
+  .btn-primary:hover { background: #ffb748; }
+  .btn-outline { border: 1px solid var(--muted); color: var(--chalk); }
+  .btn-outline:hover { border-color: var(--chalk); }
+
+  /* ---- Skills (shot chart grid) ---- */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+  }
+  .skill-group .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--marker);
+    margin-bottom: 12px;
+  }
+  .skill-group ul {
+    list-style: none;
+    margin: 0; padding: 0;
+    color: var(--chalk);
+    font-size: 15px;
+  }
+  .skill-group li {
+    padding: 7px 0;
+    border-bottom: 1px solid var(--ink-soft);
+  }
+  .skill-group li:last-child { border-bottom: none; }
+
+  /* ---- Resume + Contact ---- */
+  .card-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  footer {
+    padding: 40px 0 60px;
+    text-align: center;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+
+  @media (max-width: 640px) {
+    header.hero { padding: 64px 0 48px; }
+    section { padding: 56px 0; }
+    .stat { border-right: none; border-bottom: 1px solid var(--ink-soft); }
+    .stat:last-child { border-bottom: none; }
+    .statline { grid-template-columns: 1fr; }
+  }
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="brand">J. PRADO</span>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#project">Project</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#resume">Resume</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Scouting Report</div>
+    <h1 class="name">Juan Prado</h1>
+    <div class="position-tag">MIS &nbsp;·&nbsp; DATA ANALYTICS &nbsp;·&nbsp; ASPIRING BASKETBALL ANALYST</div>
+    <p class="hero-sub">
+      Junior studying <strong>Management Information Systems</strong> at the University of Houston,
+      building data platforms with a long-term goal of working in <strong>NBA analytics</strong> —
+      helping teams make decisions with data.
+    </p>
+
+    <div class="statline">
+      <div class="stat">
+        <div class="label">School</div>
+        <div class="value"><span class="highlight" style="--d:0.1s">U. of Houston</span></div>
+      </div>
+      <div class="stat">
+        <div class="label">Class</div>
+        <div class="value"><span class="highlight" style="--d:0.25s">Junior</span></div>
+      </div>
+      <div class="stat">
+        <div class="label">HackMISSO</div>
+        <div class="value"><span class="highlight" style="--d:0.4s">3rd Place</span></div>
+      </div>
+      <div class="stat">
+        <div class="label">Stack</div>
+        <div class="value"><span class="highlight" style="--d:0.55s">SQL · React · FastAPI</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2>Scouting Notes</h2>
+    </div>
+    <p class="prose">
+      I'm looking for internships in <strong>Data Analytics, Business Intelligence, Business
+      Analyst,</strong> and <strong>IT Analyst</strong> roles — with an eye on eventually working
+      in sports analytics. In HackMISSO, my team placed 3rd designing an Employee Financial
+      Wellness Platform in Figma. Outside of coursework, I build projects that combine software
+      engineering with data analysis, because that combination is what I want to bring to a team.
+    </p>
+  </div>
+</section>
+
+<section id="project">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>Game Film</h2>
+    </div>
+
+    <div class="project-card" data-reveal>
+      <div class="tagline">FEATURED PROJECT</div>
+      <h3>Fantasy Basketball Analytics Platform</h3>
+      <p>
+        A full-stack NBA analytics platform — real player and team data, a normalized
+        PostgreSQL schema, and a REST API, with advanced fantasy metrics and dashboards
+        on the roadmap. Built to look like something an NBA analytics department would
+        actually use, not a weekend fantasy app.
+      </p>
+      <div class="tags">
+        <span class="tag">React</span>
+        <span class="tag">TypeScript</span>
+        <span class="tag">Tailwind</span>
+        <span class="tag">FastAPI</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">SQLAlchemy</span>
+        <span class="tag">nba_api</span>
+      </div>
+      <a class="btn btn-primary" href="https://github.com/Pradof14/fantasy-basketball-analytics" target="_blank" rel="noopener">
+        View on GitHub →
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2>Shot Chart</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="label">Languages & Tools</div>
+        <ul>
+          <li>SQL</li>
+          <li>Java</li>
+          <li>Excel</li>
+          <li>HTML / CSS / JS basics</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="label">Currently Building With</div>
+        <ul>
+          <li>Python (FastAPI, SQLAlchemy)</li>
+          <li>React & TypeScript</li>
+          <li>PostgreSQL</li>
+          <li>Figma</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="label">Focus Areas</div>
+        <ul>
+          <li>Data Analytics & BI</li>
+          <li>Database Design</li>
+          <li>Sports Analytics</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="resume">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2>Box Score</h2>
+    </div>
+    <p class="prose">Full resume, one click away.</p>
+    <div class="card-row">
+      <a class="btn btn-primary" href="resume.pdf" target="_blank" rel="noopener">Download Resume →</a>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2>Get In Touch</h2>
+    </div>
+    <div class="card-row">
+      <a class="btn btn-outline" href="https://github.com/Pradof14" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn btn-outline" href="https://www.linkedin.com/in/jfprado04/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-outline" href="mailto:jupr2004@gmail.com">Email</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Built by Juan Prado — 2026
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('[data-reveal]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach((el) => observer.observe(el));
+</script>
+
+</body>
+</html>
